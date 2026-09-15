@@ -294,7 +294,3 @@ for p_thresh in [0.01, 0.05, 0.10]:
 **M4:** Production-ready code, reproducibility verification
 
 ---
-
-## Questions?
-
-Contact: foram.gohel@alumni.ahmedabad.edu or priya.iyengar@alumni.ahmedabad.edu

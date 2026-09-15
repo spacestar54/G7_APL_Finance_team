@@ -171,9 +171,4 @@ This runs the full pipeline:
 
 ---
 
-## Contact
-
-- **Foram Gohel:** foram.gohel@alumni.ahmedabad.edu
-- **Priya Iyengar:** priya.iyengar@alumni.ahmedabad.edu
-
 **GitHub:** https://github.com/spacestar54/G7_APL_Finance_team.git
