@@ -172,3 +172,6 @@ This runs the full pipeline:
 ---
 
 **GitHub:** https://github.com/spacestar54/G7_APL_Finance_team.git
+=======
+# G7_APL_Finance_team
+>>>>>>> 94486683a36f5f0dc8309b9159ecf47e96498a0c
