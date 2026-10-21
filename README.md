@@ -3,8 +3,7 @@
 **Project:** CSE516 Probabilistic Graphical Models Major Project  
 **Group:** G7 APL Finance team  
 **Members:** Foram Gohel (AU2340054), Priya Iyengar (AU2340263)  
-**Milestone:** M1 (Proposal & Scoping)  
-**Submission Date:** September 15, 2026  
+**Milestones:** M1 (Proposal & Scoping) | M2 (Implementation & Evaluation)
 
 ---
 
@@ -155,9 +154,18 @@ This runs the full pipeline:
 
 ## Milestones Ahead
 
-- **M2 (Oct 11):** Full DYNOTEARS optimization, regularization tuning
 - **M3 (Nov 1):** Systematic comparison, sensitivity analysis, market regime analysis
 - **M4 (Nov 22):** Final evaluation, reproducibility, limitations & future work
+
+---
+
+## M2: Video Demonstration
+
+**Project:** Portfolio Temporal Structure Learning with Dynamic Bayesian Networks
+
+**Milestone:** M2 — DYNOTEARS Implementation and Evaluation
+
+**Video Demonstration:** [Watch the M2 Project Video](https://drive.google.com/drive/folders/1M3tHWr31MaXgN-LWe8WreHrU115yPbEM?usp=drive_link)
 
 ---
 
