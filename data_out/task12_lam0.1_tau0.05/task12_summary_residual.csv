@@ -1,0 +1,2 @@
+model,replicates,block_length,ref_edges,edges_per_replicate_mean,edges_per_replicate_sd,A_edges_per_replicate_mean,mean_pairwise_jaccard,median_freq_directed,share_freq_ge_0_9,share_freq_ge_0_7,share_freq_ge_0_5,share_undirected_ge_0_7,within_sector_share_stable,within_sector_share_unstable
+residual,30,20,119,155.33333333333334,9.571269268090772,37.56666666666667,0.2118132284447549,0.5,0.07563025210084033,0.23529411764705882,0.5210084033613446,0.6302521008403361,0.8928571428571429,0.7894736842105263
