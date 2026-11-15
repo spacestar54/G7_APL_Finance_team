@@ -1,214 +1,375 @@
 # Portfolio Temporal Structure Learning with Dynamic Bayesian Networks
 
-**Project:** CSE516 – Probabilistic Graphical Models Major Project  
+**Course:** CSE516 – Probabilistic Graphical Models  
+**Project:** Major Project – Applied AI (Finance)  
 **Group:** G7 APL Finance Team  
-**Members:** Foram Gohel (AU2340054), Priya Iyengar (AU2340263)  
-**Milestones:** M1 (Proposal & Scoping) | M2 (Implementation & Evaluation) | M3 (Systematic Comparison) | M4 (Final Evaluation)
+**Members:**
+- Foram Gohel (AU2340054)
+- Priya Iyengar (AU2340263)
+
+**Milestones:** M1 (Proposal & Scoping) | M2 (Technical Foundation) | M3 (Systematic Comparison) | M4 (Final Evaluation)
 
 ---
 
-## Overview
+## 1. Project Overview
 
-We learn **directed acyclic graph (DAG) structures** from portfolio time-series data using dynamic Bayesian networks.
+This project investigates the learning of directed graphical structures from financial time-series data using Dynamic Bayesian Networks (DBNs).
 
-The core question is: **Which assets directly predict which other assets over time?**
+The central research question is:
+
+**Which financial assets exhibit direct contemporaneous and temporal dependencies with other assets?**
+
+We study the application of structure learning to stock returns, using the DYNOTEARS framework proposed by Pamfil et al. (2020).
+
+The project evolved across four milestones, beginning with an initial proposal and simplified proof of concept, followed by a full DYNOTEARS implementation, systematic experimentation, and final evaluation.
 
 **Base Paper:** Pamfil et al., "DYNOTEARS: Structure Learning from Time-Series Data," AISTATS 2020.
 
-**Application:** Portfolio asset returns.
+**Application Domain:** Financial time-series and stock market dependency analysis.
 
 ---
 
-## Problem Statement
+## 2. Project Evolution and Scope
 
-Traditional portfolio models such as VAR and GARCH capture statistical dependencies but provide limited insight into the underlying relationships between assets.
+The project underwent a refinement of its research scope after the initial proposal.
 
-We use **structure learning** to discover sparse, interpretable temporal dependency structures.
+### M1 – Initial Proposal
 
-A directed edge from Apple → Microsoft, for example, indicates that Apple's past returns help predict Microsoft's current returns.
+The original M1 proposal focused on learning temporal dependencies among a small subset of major S&P 500 stocks.
 
-This enables:
-- Portfolio construction based on lead-lag relationships.
-- Risk management through contagion pathways.
-- Interpretable financial dependency networks.
+The proposed experimental configuration included:
+- 10–15 major stocks.
+- Proposed period: 2015–2024.
+- Log-return transformation and standardization.
+- Initial lag-1 ARX-based structure learning.
+- Comparison against a VAR baseline.
+
+The initial implementation was intended as a simplified proof of concept to establish the research direction.
+
+### M2–M4 – Refined Research Scope
+
+From M2 onwards, the project was refined into a DYNOTEARS-based investigation using the S&P 100 universe.
+
+The subsequent milestones focused on:
+- Implementing DYNOTEARS from scratch.
+- Learning contemporaneous and lagged dependency structures.
+- Evaluating structure recovery on synthetic data.
+- Applying the model to real-world financial returns.
+- Comparing predictive and probabilistic performance against baseline models.
+- Conducting sensitivity, ablation and robustness analyses.
+
+The individual milestone folders contain the corresponding reports, code and experimental outputs.
 
 ---
 
-## PGM Framework: Representation, Learning, and Inference
+## 3. Problem Statement
 
-### Representation: Dynamic Bayesian Network
+Financial time-series exhibit complex dependencies. Stock returns may be influenced by market-wide movements, industry relationships and temporal interactions between assets.
 
-- **Nodes:** Assets at time *t* and *t-1*.
-- **Edges:** Directed relationships between variables across time.
-- **Acyclicity:** Enforced through the model formulation.
-- **Distribution:** Factorizes according to the learned DAG structure.
+Traditional econometric models such as VAR and GARCH capture statistical dependencies but do not explicitly identify sparse directed graphical structures.
 
-### Learning: Score-Based Structure Learning
+This project investigates structure learning to discover interpretable relationships between financial variables.
 
-The objective is to learn a sparse, interpretable DAG while satisfying acyclicity constraints.
+A directed edge from one asset to another represents a learned conditional dependency under the model.
 
-The original M1 approach used lag-1 ARX models to identify significant coefficients and construct the initial network. Subsequent milestones developed the implementation using DYNOTEARS.
+Such structures can help investigate:
+- Relationships between financial assets.
+- Contemporaneous and lagged dependencies.
+- Portfolio risk and interconnectedness.
+- The interpretability and stability of learned financial networks.
 
-**Base formulation:**
+The learned edges are statistical model relationships and should not automatically be interpreted as established causal effects.
+
+---
+
+## 4. Probabilistic Graphical Model Framework
+
+### 4.1 Representation: Dynamic Bayesian Network
+
+The project represents financial time-series using a Dynamic Bayesian Network.
+
+The DYNOTEARS formulation separates two types of relationships:
+
+- **W – Intra-slice structure:** Contemporaneous relationships between variables at the same time step. The corresponding graph must be acyclic.
+- **A – Inter-slice structure:** Lagged relationships connecting previous observations to current observations.
+
+The structural vector autoregressive formulation is:
 
 ```text
-min_G [ BIC(G) + λ|E| ]
+X = XW + YA + Z
 ```
 
 Where:
-- **Score:** BIC, balancing goodness-of-fit and model complexity.
-- **Penalty:** Sparsity, controlled by the number of edges.
-- **Constraint:** Acyclicity of the learned graph.
+- X represents the observed time-series.
+- Y represents lagged observations.
+- W represents contemporaneous relationships.
+- A represents lagged relationships.
+- Z represents residual noise.
 
-### Inference: Temporal Prediction and Edge Discovery
+### 4.2 Learning: DYNOTEARS
 
-Given the learned DAG:
+The project implements score-based structure learning with sparsity penalties and an acyclicity constraint.
 
-- **Prediction:** Use learned temporal relationships to estimate future asset returns.
-- **Interpretation:** Directed edges reveal direct temporal dependencies.
-- **Evaluation:** Compare out-of-sample predictive performance against baseline models.
+The optimization objective is:
 
----
+```text
+minimize  (1/2n) ||X - XW - YA||²
+          + λW ||W||₁
+          + λA ||A||₁
+```
 
-## Baseline and KPIs
+Subject to the acyclicity constraint:
 
-### Baseline
+```text
+h(W) = tr(exp(W ⊙ W)) - d = 0
+```
 
-**Vector Autoregressive (VAR) Model**
+The implementation uses an augmented Lagrangian optimization procedure and L-BFGS-B.
 
-- Fits a dense coefficient matrix.
-- Does not explicitly perform sparse structure learning.
-- Serves as a benchmark for predictive performance.
+### 4.3 Inference and Evaluation
 
-### Key Performance Indicators
-
-| Category | Metric | Meaning |
-|---|---|---|
-| Representation | Sparsity, Density, Mean Degree | Measures network complexity |
-| Learning | BIC, Number of Significant Edges | Evaluates model fit and learned structure |
-| Inference | RMSE, MAE | Measures out-of-sample prediction accuracy |
-| Structure | Edge List, Acyclicity Check | Evaluates interpretability and consistency |
-
----
-
-## Data
-
-**Primary Dataset:** Historical daily stock returns.
-
-The initial M1 proposal used the following dataset configuration:
-
-- **Assets:** 10 major stocks — AAPL, MSFT, GOOGL, AMZN, TSLA, JPM, GS, XOM, CVX, NVDA.
-- **Period:** January 2015 – January 2024.
-- **Preprocessing:** Log returns and standardization.
-- **Train-Test Split:** 80:20 temporal split.
-- **Source:** Yahoo Finance, accessed through the `yfinance` Python package.
-
-Refer to the individual milestone reports for the final experimental dataset and preprocessing configuration.
+The learned structures are evaluated through:
+- Predictive performance.
+- Graph structure and sparsity.
+- Synthetic ground-truth recovery.
+- Forecasting and probabilistic scoring.
+- Stability and robustness analysis.
 
 ---
 
-## Folder Structure
+## 5. Experimental Dataset
+
+The final experimental work from M2 onwards uses historical daily stock returns from the S&P 100 universe.
+
+The M1 dataset configuration was an initial proposal and should not be confused with the dataset used in the subsequent DYNOTEARS experiments.
+
+### Final Experimental Configuration
+
+| Attribute | Configuration |
+|---|---|
+| Market universe | S&P 100 |
+| Usable stocks | 93 |
+| Period | 1 July 2014 – 30 June 2019 |
+| Observations | 1,257 daily log-return observations |
+| Transformation | Log-returns |
+| Scaling | Zero mean and unit variance |
+| Data source | Yahoo Finance historical price data |
+
+The experimental pipeline includes price retrieval, data cleaning, alignment, log-return computation and standardization.
+
+The precise preprocessing and validation configurations are documented in the respective milestone reports.
+
+Synthetic datasets are additionally used to evaluate structure recovery under controlled conditions with known ground-truth graphs.
+
+---
+
+## 6. Baselines and Evaluation Metrics
+
+The project uses multiple baselines and evaluation metrics across its milestones.
+
+### Baseline Models
+
+- Vector Autoregression (VAR).
+- Independent NOTEARS and Lasso.
+- Market and sector factor models.
+- Ridge regression.
+- ARIMA.
+- GARCH-based variance models.
+
+The specific baselines vary according to the experiment and milestone.
+
+### Evaluation Metrics
+
+| Category | Metrics |
+|---|---|
+| Graph Structure | Edge count, density, sparsity, mean degree |
+| Structure Recovery | Precision, Recall, F1, Structural Hamming Distance |
+| Model Fit | Loss, BIC |
+| Forecasting | RMSE, MAE |
+| Probabilistic Evaluation | CRPS, Brier Score |
+| Robustness | Bootstrap edge stability, selection frequency |
+| Statistical Analysis | Confidence intervals and paired statistical tests |
+
+---
+
+## 7. Repository Organization
+
+The repository contains separate submissions for each project milestone.
 
 ```text
 G7_APL_Finance_team/
+│
 ├── README.md
-├── Report/
-│   ├── M1_G7_Report.pdf
-│   └── Final_Report.pdf
-├── Code/
-│   ├── src/
-│   │   ├── structure_learner.py
-│   │   ├── data_loader.py
-│   │   └── m1_experiment.py
-│   └── README.md
-├── Data/
-│   └── README.md
-├── Results/
-│   ├── learned_dag.png
-│   └── kpi_summary.txt
-└── Video/
-    └── M4_video_link.txt
+│
+├── M1_G7_APL_Finance_team/
+│   ├── README.md
+│   ├── M1_Report.pdf
+│   └── Code/
+│       ├── README.md
+│       ├── requirements.txt
+│       └── src/
+│           ├── data_loader.py
+│           ├── m1_experiment.py
+│           └── structure_learner.py
+│
+├── M2_G7_APL_Finance_team/
+│   ├── README.md
+│   ├── Code/
+│   ├── Data/
+│   ├── Report/
+│   ├── Results/
+│   └── Video/
+│
+├── M3_G7_APL_Finance_team/
+│   ├── README.md
+│   ├── Code/
+│   ├── Data/
+│   ├── Report/
+│   └── Results/
+│
+└── M4_G7_APL_Finance_team/
+    ├── README.md
+    ├── code/
+    ├── Data/
+    ├── Report/
+    ├── Results/
+    ├── Presentation/
+    └── Video/
 ```
+
+Each milestone directory contains its corresponding submission materials.
 
 ---
 
-## How to Run
+## 8. Milestone Details
 
-Refer to `Code/README.md` for detailed installation instructions and execution steps.
+### M1 – Proposal & Scoping
 
-Quick start:
+Established the original research direction and initial methodology.
+
+Key components:
+- Problem formulation and project motivation.
+- Literature review and SOTA positioning.
+- Dynamic Bayesian Network representation.
+- Initial ARX-based structure-learning approach.
+- VAR baseline and proposed evaluation metrics.
+- Initial experimental plan.
+
+### M2 – Technical Foundation
+
+Implemented the DYNOTEARS framework and established the technical foundation for subsequent experiments.
+
+Key components:
+- S&P 100 data pipeline.
+- DYNOTEARS implementation from scratch.
+- Synthetic simulation and validation.
+- Reproduction of paper-based experiments.
+- Baseline implementation.
+- Initial forecasting and evaluation.
+- Technical report and video demonstration.
+
+### M3 – Systematic Comparison
+
+Conducted systematic experiments on synthetic and real-world financial data.
+
+Key components:
+- Synthetic graph-recovery experiments.
+- Sample-size and dimensionality analysis.
+- Missing-data and measurement-noise experiments.
+- Solver ablation.
+- Rolling-origin forecasting evaluation.
+- Comparison against baseline models.
+- Statistical analysis and experimental results.
+
+### M4 – Final Evaluation
+
+Extended the experimental framework with additional evaluation, robustness and reproducibility analyses.
+
+Key components:
+- Rolling-origin forecasting.
+- Distributional and probabilistic evaluation.
+- Factor and sector-based baselines.
+- Residual graph analysis.
+- Bootstrap edge-stability experiments.
+- ARIMA and GARCH comparisons.
+- Error analysis and calibration.
+- Final report, presentation and video demonstration.
+
+---
+
+## 9. Running the Project
+
+Each milestone contains its own implementation and dependency documentation.
+
+Refer to the corresponding milestone's README and requirements file for installation instructions and execution commands.
+
+For the initial M1 implementation:
 
 ```bash
-cd Code
+cd M1_G7_APL_Finance_team/Code
+pip install -r requirements.txt
 python src/m1_experiment.py
 ```
 
-The initial experiment pipeline:
+For M2, M3 and M4, follow the execution instructions documented in their respective code directories.
 
-1. Loads portfolio data.
-2. Learns the DAG structure.
-3. Computes representation, learning, and inference KPIs.
-4. Compares results against the VAR baseline.
-5. Visualizes the learned network.
-6. Generates a summary of results.
+The M4 implementation also provides an experiment runner:
 
-**Output:** Console results and visualizations saved to the `Results/` directory.
+```bash
+python run_all.py --dry-run
+```
 
----
-
-## Key Project Contributions
-
-- **Problem Definition:** Applied temporal structure learning to financial portfolio returns.
-- **PGM Framework:** Demonstrated representation, learning, and inference.
-- **SOTA Positioning:** Studied and implemented DYNOTEARS based on Pamfil et al. (2020).
-- **Baseline and Evaluation:** Established benchmark models and quantitative evaluation metrics.
-- **Reproducibility:** Developed modular code and an experimental pipeline.
-- **Model Evaluation:** Investigated learned temporal dependencies, predictive performance, and network stability.
+Refer to the M4 documentation for the complete execution sequence and reproducibility instructions.
 
 ---
 
-## Team Responsibilities
+## 10. Project Contributions
 
-- **Foram Gohel:** Data loading, preprocessing, VAR baseline, and prediction evaluation.
-- **Priya Iyengar:** Structure learning, DAG visualization, and KPI computation.
-- **Both:** Code documentation, report preparation, video demonstration, and interpretation of results.
+The project investigates several aspects of probabilistic graphical modelling and financial time-series analysis:
 
----
-
-## Milestones
-
-- **M1 – Proposal & Scoping:** Problem formulation, literature review, and initial methodology.
-- **M2 – Implementation & Evaluation:** Initial implementation and experimental evaluation.
-- **M3 – Systematic Comparison:** Model comparisons, sensitivity analysis, and market regime analysis.
-- **M4 – Final Evaluation:** Final experiments, reproducibility, limitations, and future work.
+- **Dynamic Bayesian Networks:** Representation of contemporaneous and lagged dependencies.
+- **Structure Learning:** Implementation of continuous optimization for DAG discovery.
+- **Synthetic Validation:** Evaluation against known ground-truth structures.
+- **Financial Applications:** Application of learned structures to S&P 100 stock returns.
+- **Model Comparison:** Evaluation against statistical and factor-based baselines.
+- **Robustness:** Investigation of sensitivity and stability of learned graph structures.
+- **Reproducibility:** Modular code, archived datasets, experiment outputs and documentation.
 
 ---
 
-## M2: Video Demonstration
+## 11. Team Information
 
-**Project:** Portfolio Temporal Structure Learning with Dynamic Bayesian Networks
+**Foram Gohel**  
+Enrollment No.: AU2340054
 
-**Milestone:** M2 — DYNOTEARS Implementation and Evaluation
+**Priya Iyengar**  
+Enrollment No.: AU2340263
 
-**Video Demonstration:** [Watch the M2 Project Video](https://drive.google.com/drive/folders/1M3tHWr31MaXgN-LWe8WreHrU115yPbEM)
+Both members contributed to the project across its milestones. Specific individual contributions should be referred to in the relevant milestone documentation.
 
 ---
 
-## M4: Video Demonstration
+## 12. Video Demonstrations
 
-**Project:** Portfolio Temporal Structure Learning with Dynamic Bayesian Networks
+### M2 – DYNOTEARS Implementation and Evaluation
 
-**Milestone:** M4 — Final Evaluation
+[Watch the M2 Project Video](https://drive.google.com/drive/folders/1M3tHWr31MaXgN-LWe8WreHrU115yPbEM)
 
-**Video Demonstration:** [Watch the M4 Project Video](https://drive.google.com/drive/folders/1M3tHWr31MaXgN-LWe8WreHrU115yPbEM)
+### M4 – Final Evaluation
 
-## References
+[Watch the M4 Project Video](https://drive.google.com/drive/folders/1M3tHWr31MaXgN-LWe8WreHrU115yPbEM)
+
+---
+
+## 13. References
 
 [1] Pamfil, R. et al. (2020). *DYNOTEARS: Structure Learning from Time-Series Data*. Proceedings of the 23rd International Conference on Artificial Intelligence and Statistics (AISTATS).
 
-[2] Koller, D., Friedman, N. (2009). *Probabilistic Graphical Models: Principles and Techniques*. MIT Press.
+[2] Zheng, X., Aragam, B., Ravikumar, P., and Xing, E. P. (2018). *DAGs with NO TEARS: Continuous Optimization for Structure Learning*. NeurIPS.
 
-[3] Lütkepohl, H. (2005). *New Introduction to Multiple Time Series Analysis*. Springer.
+[3] Koller, D. and Friedman, N. (2009). *Probabilistic Graphical Models: Principles and Techniques*. MIT Press.
+
+[4] Lütkepohl, H. (2005). *New Introduction to Multiple Time Series Analysis*. Springer.
 
 ---
 
