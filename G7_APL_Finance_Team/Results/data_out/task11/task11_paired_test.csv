@@ -1,2 +1,0 @@
-comparison,mean_CRPS_gain,CI95_low,CI95_high,graph_better_on_share_of_days,wilcoxon_p
-residual graph vs market + sector alone,0.01384891131653925,0.012922726071879415,0.014784836635498871,0.9573934837092731,2.479741213928141e-63

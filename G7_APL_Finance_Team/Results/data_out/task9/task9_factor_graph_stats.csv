@@ -1,3 +1,0 @@
-graph,edges_A,edges,positive_share,median_abs_w,within_sector_edge_share,within_sector_by_chance,nmi_vs_sector
-Original DYNOTEARS (raw returns),0,253,1.0,0.13400872973662648,0.6679841897233202,0.12879850397381953,0.738042967414767
-DYNOTEARS on factor-free residuals,3,168,0.875,0.11571653827199271,0.7440476190476191,0.12879850397381953,0.7806902274051268
