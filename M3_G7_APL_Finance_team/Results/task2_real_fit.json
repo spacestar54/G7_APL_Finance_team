@@ -1,0 +1,16 @@
+{
+  "dynotears": {
+    "val_loss": 170.45978349698194,
+    "nnz_W": 318,
+    "nnz_A": 3,
+    "pos_frac_W": 1.0,
+    "seconds": 306.32311177253723
+  },
+  "static_notears": {
+    "val_loss": 170.52152195309236,
+    "nnz_W": 316,
+    "nnz_A": 0,
+    "pos_frac_W": 1.0,
+    "seconds": 216.12995743751526
+  }
+}

@@ -1,0 +1,6 @@
+model,mean_mse_gain_vs_zero,ci95_low,ci95_high,block_bootstrap_p,note
+Train-mean predictor,-7.230495360222954e-07,-1.6010425635715368e-05,1.5681824943577046e-05,0.999,positive gain = better than zero predictor
+VAR(1) OLS,-0.1826077408285184,-0.21394708091248427,-0.15561469093748398,0.0,positive gain = better than zero predictor
+Ridge-VAR(1),-0.001348128374283226,-0.0027041301931310904,-0.00017897496735553708,0.02,positive gain = better than zero predictor
+Lasso-VAR(1),-6.2403475377420714e-18,-2.6899623468287873e-17,1.259385958680289e-17,0.564,positive gain = better than zero predictor
+DYNOTEARS,-6.2403475377420714e-18,-2.5595204553868802e-17,1.3227208292125965e-17,0.509,positive gain = better than zero predictor
