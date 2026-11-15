@@ -1,0 +1,3 @@
+comparison,p,better_share
+Factor + residual graph vs One-factor only,1.1571515942308309e-66,0.9824561403508771
+Factor + residual graph vs Original DYNOTEARS graph,2.928912708647527e-28,0.7092731829573935

@@ -1,0 +1,10 @@
+sector,var_explained_market_sector,var_explained_hybrid,graph_gain_in_var_explained,n_stocks
+Consumer Cyclicals,0.313,0.344,0.031,14
+Consumer Non-Cyclicals,0.383,0.446,0.063,8
+Energy,0.559,0.63,0.071,6
+Financials,0.596,0.624,0.028,15
+Healthcare,0.401,0.418,0.017,14
+Industrials,0.476,0.497,0.021,13
+Technology,0.54,0.574,0.034,17
+Telecommunications,0.295,0.493,0.198,2
+Utilities,0.641,0.699,0.058,4
