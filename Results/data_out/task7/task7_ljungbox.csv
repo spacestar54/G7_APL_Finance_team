@@ -1,5 +1,0 @@
-series,n_stocks,lag,n_p_below_0_05,expected_by_chance,n_p_below_0_01,n_rejected_after_BH_FDR_5pct,median_p
-Returns,93,10,12,4.7,2,0,0.33961286978127464
-Squared returns,93,10,64,4.7,58,64,8.500946973668844e-05
-AR(1) residuals,93,10,6,4.7,2,0,0.42708891901362506
-DYNOTEARS structural residuals (train),93,10,11,4.7,4,3,0.38329552859155375
