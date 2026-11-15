@@ -205,12 +205,6 @@ G7_APL_Finance_team/
 │   ├── README.md
 │   ├── M1_Report.pdf
 │   └── Code/
-│       ├── README.md
-│       ├── requirements.txt
-│       └── src/
-│           ├── data_loader.py
-│           ├── m1_experiment.py
-│           └── structure_learner.py
 │
 ├── M2_G7_APL_Finance_team/
 │   ├── README.md
